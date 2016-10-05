@@ -5,5 +5,5 @@ package com.naskogeorgiev.simpleshoppinglist;
  */
 
 public interface IRecycleViewSelectedElement {
-    void onItemSelected(int position);
+    void onCheckboxSelected(int position);
 }

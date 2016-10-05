@@ -25,21 +25,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
-            android:text="Product Name"
+            android:text="@string/column_product_name"
             android:gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Amount"
+            android:text="@string/column_amount"
             android:gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Found"
             android:gravity="center_horizontal"/>
     </LinearLayout>
 

@@ -34,8 +34,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public void onBindViewHolder(ShoppingViewHolder holder, int position) {
-        holder.tvName.setText(mData.get(position).getName());
-        holder.tvAmount.setText(String.valueOf(mData.get(position).getAmount()));
+        holder.tvName.setText(mData.get(position).getTitle());
+        holder.tvAmount.setText(String.valueOf(mData.get(position).getQuantity()));
         holder.chbFound.setChecked(mData.get(position).isFound());
 
         if(mData.get(position).isFound()) {
@@ -70,7 +70,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             chbFound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemSelected(position);
+                    mListener.onCheckboxSelected(position);
                 }
             });
         }

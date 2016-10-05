@@ -11,6 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/tv_name"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:layout_weight="0.7" />
 
     <TextView

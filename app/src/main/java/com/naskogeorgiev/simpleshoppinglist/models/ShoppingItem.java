@@ -1,42 +1,55 @@
 package com.naskogeorgiev.simpleshoppinglist.models;
 
-/**
- * Created by nasko.georgiev on 10.9.2016 г..
- */
+import com.orm.SugarRecord;
 
-public class ShoppingItem {
-    private String mName;
+public class ShoppingItem extends SugarRecord {
+    private String title;
+    private float quantity;
+    private boolean isFound;
+    private ShoppingList list;
 
-    public ShoppingItem(String mName, float mAmount, boolean mFound) {
-        this.mName = mName;
-        this.mAmount = mAmount;
-        this.mFound = mFound;
+    public ShoppingItem()
+    {
+
     }
 
-    private float mAmount;
-    private boolean mFound;
-
-    public String getName() {
-        return mName;
+    public ShoppingItem(String title, float quantity, boolean isFound, ShoppingList list) {
+        this.setTitle(title);
+        this.setQuantity(quantity);
+        this.setFound(isFound);
+        this.setList(list);
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
+
+    public String getTitle() {
+        return title;
     }
 
-    public float getAmount() {
-        return mAmount;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setAmount(float mAmount) {
-        this.mAmount = mAmount;
+    public float getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(float quantity) {
+        this.quantity = quantity;
     }
 
     public boolean isFound() {
-        return mFound;
+        return isFound;
     }
 
-    public void setFound(boolean mFound) {
-        this.mFound = mFound;
+    public void setFound(boolean found) {
+        isFound = found;
+    }
+
+    public ShoppingList getList() {
+        return list;
+    }
+
+    public void setList(ShoppingList list) {
+        this.list = list;
     }
 }

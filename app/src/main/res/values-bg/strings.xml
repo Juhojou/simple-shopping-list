@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Списък за пазаруване</string>
+    <string name="action_settings">Настройки</string>
+    <string name="column_amount">Количество</string>
+    <string name="column_product_name">Име</string>
+    <string name="hint_product_amount">Количество</string>
+    <string name="hint_product_name">Продукт</string>
+    <string name="new_product">Нов продукт</string>
+    <string name="details_label">Details</string>
+</resources>
