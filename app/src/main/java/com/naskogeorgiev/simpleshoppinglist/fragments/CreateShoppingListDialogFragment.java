@@ -1,4 +1,4 @@
-package com.naskogeorgiev.simpleshoppinglist;
+package com.naskogeorgiev.simpleshoppinglist.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,19 +8,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
-/**
- * Created by nasko on 11.09.16.
- */
+import com.naskogeorgiev.simpleshoppinglist.R;
 
-public class CreateItemDialogFragment extends DialogFragment {
 
-    DialogListener mListener;
+public class CreateShoppingListDialogFragment extends DialogFragment {
+
+    CreateShoppingListDialogFragment.DialogListener mListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = (DialogListener) context;
+            mListener = (CreateShoppingListDialogFragment.DialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement NoticeDialogListener");
@@ -32,18 +31,18 @@ public class CreateItemDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setTitle(R.string.new_product)
-                .setView(inflater.inflate(R.layout.fragment_new_item, null))
-                .setPositiveButton("Добави", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.new_shopping_list)
+                .setView(inflater.inflate(R.layout.fragment_new_list, null))
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDialogPositiveClick(CreateItemDialogFragment.this);
+                        mListener.onDialogPositiveClick(CreateShoppingListDialogFragment.this);
                     }
                 })
-                .setNegativeButton("Отказ", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDialogNegativeClick(CreateItemDialogFragment.this);
+                        mListener.onDialogNegativeClick(CreateShoppingListDialogFragment.this);
                     }
                 });
 
@@ -56,5 +55,4 @@ public class CreateItemDialogFragment extends DialogFragment {
 
         void onDialogNegativeClick(DialogFragment dialog);
     }
-
 }

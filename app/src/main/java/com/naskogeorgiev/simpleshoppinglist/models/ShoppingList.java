@@ -1,21 +1,14 @@
 package com.naskogeorgiev.simpleshoppinglist.models;
 
-import com.orm.SugarRecord;
 
-import java.util.List;
-
-
-public class ShoppingList extends SugarRecord {
+public class ShoppingList {
+    private int id;
     private String title;
-    private List<ShoppingItem> items;
+    private boolean completed;
 
-    public ShoppingList() {
-
-    }
-
-    public ShoppingList(String title, List<ShoppingItem> items) {
+    public ShoppingList(String title, boolean completed) {
         this.setTitle(title);
-        this.setItems(items);
+        this.setCompleted(completed);
     }
 
 
@@ -27,12 +20,15 @@ public class ShoppingList extends SugarRecord {
         this.title = title;
     }
 
-    public List<ShoppingItem> getItems() {
-        return ShoppingItem.find(ShoppingItem.class, "listId = ?", String.valueOf(getId()));
-
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setItems(List<ShoppingItem> items) {
-        this.items = items;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public int getId() {
+        return id;
     }
 }

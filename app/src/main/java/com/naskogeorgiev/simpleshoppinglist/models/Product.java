@@ -1,23 +1,17 @@
 package com.naskogeorgiev.simpleshoppinglist.models;
 
-import com.orm.SugarRecord;
-
-public class ShoppingItem extends SugarRecord {
+public class Product {
+    private int id;
     private String title;
     private float quantity;
-    private boolean isFound;
-    private ShoppingList list;
+    private boolean found;
+    private int shopping_list_id;
 
-    public ShoppingItem()
-    {
-
-    }
-
-    public ShoppingItem(String title, float quantity, boolean isFound, ShoppingList list) {
+    public Product(String title, float quantity, boolean found, int listId) {
         this.setTitle(title);
         this.setQuantity(quantity);
-        this.setFound(isFound);
-        this.setList(list);
+        this.setFound(found);
+        this.setListId(listId);
     }
 
 
@@ -38,18 +32,20 @@ public class ShoppingItem extends SugarRecord {
     }
 
     public boolean isFound() {
-        return isFound;
+        return found;
     }
 
     public void setFound(boolean found) {
-        isFound = found;
+        this.found = found;
     }
 
-    public ShoppingList getList() {
-        return list;
+    public int getListId() {
+        return shopping_list_id;
     }
 
-    public void setList(ShoppingList list) {
-        this.list = list;
+    public void setListId(int listId) {
+        this.shopping_list_id = listId;
     }
+
+    public int getId() {return id;}
 }

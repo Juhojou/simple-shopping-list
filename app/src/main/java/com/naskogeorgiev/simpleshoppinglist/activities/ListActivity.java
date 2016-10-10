@@ -1,8 +1,8 @@
 package com.naskogeorgiev.simpleshoppinglist.activities;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,22 +14,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import com.naskogeorgiev.simpleshoppinglist.CreateItemDialogFragment;
-import com.naskogeorgiev.simpleshoppinglist.IRecycleViewSelectedElement;
+import com.naskogeorgiev.simpleshoppinglist.fragments.CreateProductDialogFragment;
+import com.naskogeorgiev.simpleshoppinglist.interfaces.IRecycleViewSelectedElement;
 import com.naskogeorgiev.simpleshoppinglist.R;
-import com.naskogeorgiev.simpleshoppinglist.ShoppingListAdapter;
+import com.naskogeorgiev.simpleshoppinglist.adapters.ProductAdapter;
 import com.naskogeorgiev.simpleshoppinglist.SimpleDividerItemDecoration;
-import com.naskogeorgiev.simpleshoppinglist.models.ShoppingItem;
-import com.naskogeorgiev.simpleshoppinglist.models.ShoppingList;
+import com.naskogeorgiev.simpleshoppinglist.interfaces.ShoppingListAPI;
+import com.naskogeorgiev.simpleshoppinglist.models.Product;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class ListActivity extends AppCompatActivity implements IRecycleViewSelectedElement, CreateItemDialogFragment.DialogListener{
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ListActivity extends AppCompatActivity implements IRecycleViewSelectedElement, CreateProductDialogFragment.DialogListener {
 
     private RecyclerView mRecyclerView;
-    private ShoppingListAdapter mAdapter;
+    private ProductAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<ShoppingItem> data;
+    private List<Product> products;
+
+    int listId;
+    ShoppingListAPI api;
 
     private final String TAG = getClass().getSimpleName();
 
@@ -46,60 +53,43 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
             Log.e(TAG, e.getMessage());
         }
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateItemDialogFragment dialog = new CreateItemDialogFragment();
+                CreateProductDialogFragment dialog = new CreateProductDialogFragment();
                 dialog.show(getFragmentManager(), "CreateItemDialog");
             }
         });
 
-        data = new ArrayList<>();
-        generateData();
+        Intent i = getIntent();
+        if (i.hasExtra("Index")) {
+            listId = i.getIntExtra("Index", -1);
+        }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_shopping_list);
-        mLayoutManager = new LinearLayoutManager(ListActivity.this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ShoppingListAdapter(data, ListActivity.this);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(ListActivity.this));
+        api = ShoppingListAPI.retrofit.create(ShoppingListAPI.class);
+        Call<List<Product>> call = api.getProducts(listId);
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                products = response.body();
+                mRecyclerView = (RecyclerView) findViewById(R.id.recycler_product);
+                mLayoutManager = new LinearLayoutManager(ListActivity.this);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+
+                mAdapter = new ProductAdapter(products, ListActivity.this);
+                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(ListActivity.this));
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
     }
 
-    private void generateData() {
-//        data.add(0, new ShoppingItem("Milk", 3, false));
-//        data.add(1, new ShoppingItem("Coffee", 3, true));
-//        data.add(2, new ShoppingItem("Cola", 3, true));
-//        data.add(3, new ShoppingItem("Onions", 3, false));
-//        data.add(4, new ShoppingItem("Meat", 3, false));
-//        data.add(5, new ShoppingItem("Glass", 3, true));
-//        data.add(6, new ShoppingItem("Tendjera", 14, true));
-//        data.add(7, new ShoppingItem("Tigan", 33, true));
-//        data.add(8, new ShoppingItem("Ice Cream", 23, true));
-//        data.add(9, new ShoppingItem("Моркови", 13, true));
-//        data.add(10, new ShoppingItem("Milk", 3, false));
-//        data.add(11, new ShoppingItem("Coffee", 3, true));
-//        data.add(12, new ShoppingItem("Cola", 3, true));
-//        data.add(13, new ShoppingItem("Onions", 3, false));
-//        data.add(14, new ShoppingItem("Meat", 3, false));
-//        data.add(15, new ShoppingItem("Glass", 3, true));
-//        data.add(16, new ShoppingItem("Tendjera", 14, true));
-//        data.add(17, new ShoppingItem("Tigan", 33, true));
-//        data.add(18, new ShoppingItem("Ice Cream", 23, true));
-//        data.add(19, new ShoppingItem("Моркови", 13, true));
-//        data.add(20, new ShoppingItem("Milk", 3, false));
-//        data.add(21, new ShoppingItem("Coffee", 3, true));
-//        data.add(22, new ShoppingItem("Cola", 3, true));
-//        data.add(23, new ShoppingItem("Onions", 3, false));
-//        data.add(24, new ShoppingItem("Meat", 3, false));
-//        data.add(25, new ShoppingItem("Glass", 3, true));
-//        data.add(26, new ShoppingItem("Tendjera", 14, true));
-//        data.add(27, new ShoppingItem("Tigan", 33, true));
-//        data.add(28, new ShoppingItem("Ice Cream", 23, true));
-//        data.add(29, new ShoppingItem("Моркови", 13, true));
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,12 +100,8 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -124,23 +110,48 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
     }
 
     @Override
-    public void onCheckboxSelected(int position) {
-        if(data.size() >= position) {
-            data.get(position).setFound(!data.get(position).isFound());
-            mAdapter.notifyItemChanged(position);
+    public void onItemSelected(final int position) {
+        if (products.size() >= position) {
+            Product product = products.get(position);
+            product.setFound(!product.isFound());
+
+            final Call<Product> call = api.updateProduct(product.getId(), product);
+            call.enqueue(new Callback<Product>() {
+                @Override
+                public void onResponse(Call<Product> call, Response<Product> response) {
+                    mAdapter.notifyItemChanged(position);
+                }
+
+                @Override
+                public void onFailure(Call<Product> call, Throwable t) {
+
+                }
+            });
+
         }
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        EditText view = (EditText)dialog.getDialog().findViewById(R.id.et_product_name);
+        EditText view = (EditText) dialog.getDialog().findViewById(R.id.et_product_title);
         String name = view.getText().toString();
-        view = (EditText)dialog.getDialog().findViewById(R.id.et_product_amount);
-        int amount = Integer.parseInt(view.getText().toString());
+        view = (EditText) dialog.getDialog().findViewById(R.id.et_product_quantity);
+        int quantity = Integer.parseInt(view.getText().toString());
 
-        int index = data.size();
-        data.add(index, new ShoppingItem(name, amount, false, ShoppingList.findById(ShoppingList.class, (long) 1)));
-        mAdapter.notifyItemInserted(index);
+        final Product product = new Product(name, quantity, false, listId);
+        Call<Product> call = api.createProduct(product);
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                products.add(product);
+                mAdapter.notifyItemInserted(products.size());
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

@@ -7,4 +7,9 @@
     <string name="hint_product_name">Product Name</string>
     <string name="new_product">New Product</string>
     <string name="details_label">Details</string>
+    <string name="create_list">Create List</string>
+    <string name="new_shopping_list">New Shopping List</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="shopping_list_title">Shopping List Title</string>
 </resources>

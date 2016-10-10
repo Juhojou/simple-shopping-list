@@ -1,9 +1,9 @@
-package com.naskogeorgiev.simpleshoppinglist;
+package com.naskogeorgiev.simpleshoppinglist.interfaces;
 
 /**
  * Created by nasko.georgiev on 10.9.2016 г..
  */
 
 public interface IRecycleViewSelectedElement {
-    void onCheckboxSelected(int position);
+    void onItemSelected(int position);
 }
