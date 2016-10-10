@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.naskogeorgiev.simpleshoppinglist.fragments.CreateProductDialogFragment;
+import com.naskogeorgiev.simpleshoppinglist.fragments.EditProductDialogFragment;
+import com.naskogeorgiev.simpleshoppinglist.interfaces.IListAdapterCallback;
 import com.naskogeorgiev.simpleshoppinglist.interfaces.IRecycleViewSelectedElement;
 import com.naskogeorgiev.simpleshoppinglist.R;
 import com.naskogeorgiev.simpleshoppinglist.adapters.ProductAdapter;
@@ -30,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListActivity extends AppCompatActivity implements IRecycleViewSelectedElement, CreateProductDialogFragment.DialogListener {
+public class ListActivity extends AppCompatActivity implements IRecycleViewSelectedElement, CreateProductDialogFragment.DialogListener, IListAdapterCallback, EditProductDialogFragment.DialogListener {
 
     private RecyclerView mRecyclerView;
     private ProductAdapter mAdapter;
@@ -177,5 +179,21 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+    }
+
+    @Override
+    public void onLongClicked() {
+        EditProductDialogFragment dialog = new EditProductDialogFragment();
+        dialog.show(getFragmentManager(), "EditProductDialog");
+    }
+
+    @Override
+    public void onEditDialogPositiveClick(DialogFragment dialog) {
+        //TODO: Edit the selected product
+    }
+
+    @Override
+    public void onEditDialogNegativeClick(DialogFragment dialog) {
+        //close dialog
     }
 }

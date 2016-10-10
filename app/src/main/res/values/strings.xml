@@ -12,4 +12,5 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="shopping_list_title">Shopping List Title</string>
+    <string name="edit_product">Edit Product</string>
 </resources>

@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.naskogeorgiev.simpleshoppinglist.R;
+import com.naskogeorgiev.simpleshoppinglist.interfaces.IListAdapterCallback;
 import com.naskogeorgiev.simpleshoppinglist.interfaces.IRecycleViewSelectedElement;
 import com.naskogeorgiev.simpleshoppinglist.models.Product;
 
@@ -22,10 +23,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private List<Product> mData;
     private static IRecycleViewSelectedElement mListener;
+    private static IListAdapterCallback mLongPressCallback;
 
     public ProductAdapter(List<Product> data, IRecycleViewSelectedElement listener) {
         this.mData = data;
         mListener = listener;
+        mLongPressCallback = (IListAdapterCallback)listener;
     }
 
     @Override
@@ -77,7 +80,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 @Override
                 public boolean onLongClick(View v) {
                     Log.d("LONG PRESS","SUCCESS");
-                    //TODO: Make edit dialog popup
+                    mLongPressCallback.onLongClicked();
+                    return true;
+                }
+            });
+            tvProductQuantity.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d("LONG PRESS","SUCCESS");
+                    mLongPressCallback.onLongClicked();
                     return true;
                 }
             });
