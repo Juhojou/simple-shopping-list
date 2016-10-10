@@ -8,11 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.naskogeorgiev.simpleshoppinglist.fragments.CreateProductDialogFragment;
 import com.naskogeorgiev.simpleshoppinglist.interfaces.IRecycleViewSelectedElement;
@@ -81,6 +83,9 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
                 mAdapter = new ProductAdapter(products, ListActivity.this);
                 mRecyclerView.setAdapter(mAdapter);
                 mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(ListActivity.this));
+
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+                itemTouchHelper.attachToRecyclerView(mRecyclerView);
             }
 
             @Override
@@ -89,6 +94,22 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
             }
         });
     }
+
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            //Remove swiped item from list and notify the RecyclerView
+
+            //TODO: Delete item from db and update recyclerview
+
+            Toast.makeText(getBaseContext(),"SWIPED",Toast.LENGTH_SHORT).show();
+        }
+    };
 
 
     @Override

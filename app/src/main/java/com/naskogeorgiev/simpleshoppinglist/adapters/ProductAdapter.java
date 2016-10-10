@@ -2,6 +2,7 @@ package com.naskogeorgiev.simpleshoppinglist.adapters;
 
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         ProductViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            tvProductTitle.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d("LONG PRESS","SUCCESS");
+                    //TODO: Make edit dialog popup
+                    return true;
+                }
+            });
 
             chbProductFound.setOnClickListener(new View.OnClickListener() {
                 @Override
