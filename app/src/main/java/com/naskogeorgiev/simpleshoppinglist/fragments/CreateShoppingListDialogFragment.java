@@ -9,17 +9,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import com.naskogeorgiev.simpleshoppinglist.R;
+import com.naskogeorgiev.simpleshoppinglist.interfaces.IDialogListener;
 
 
 public class CreateShoppingListDialogFragment extends DialogFragment {
 
-    CreateShoppingListDialogFragment.DialogListener mListener;
+    IDialogListener mListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = (CreateShoppingListDialogFragment.DialogListener) context;
+            mListener = (IDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement NoticeDialogListener");
@@ -28,9 +29,9 @@ public class CreateShoppingListDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.new_shopping_list)
                 .setView(inflater.inflate(R.layout.fragment_new_list, null))
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
@@ -46,13 +47,6 @@ public class CreateShoppingListDialogFragment extends DialogFragment {
                     }
                 });
 
-
         return builder.create();
-    }
-
-    public interface DialogListener {
-        void onDialogPositiveClick(DialogFragment dialog);
-
-        void onDialogNegativeClick(DialogFragment dialog);
     }
 }

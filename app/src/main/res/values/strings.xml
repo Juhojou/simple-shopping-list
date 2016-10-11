@@ -12,4 +12,7 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="shopping_list_title">Shopping List Title</string>
+    <string name="share">Share</string>
+    <string name="facebook_app_id">675464095950001</string>
+    <string name="title_required">Title is required!</string>
 </resources>

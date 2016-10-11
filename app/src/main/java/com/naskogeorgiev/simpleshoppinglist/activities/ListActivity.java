@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.naskogeorgiev.simpleshoppinglist.fragments.CreateProductDialogFragment;
 import com.naskogeorgiev.simpleshoppinglist.interfaces.IRecycleViewSelectedElement;
@@ -119,7 +120,11 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
             call.enqueue(new Callback<Product>() {
                 @Override
                 public void onResponse(Call<Product> call, Response<Product> response) {
-                    mAdapter.notifyItemChanged(position);
+                    if(response.body() != null)
+                        mAdapter.notifyItemChanged(position);
+                    else {
+                        Toast.makeText(getApplicationContext(), "Response code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -136,7 +141,7 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
         EditText view = (EditText) dialog.getDialog().findViewById(R.id.et_product_title);
         String name = view.getText().toString();
         view = (EditText) dialog.getDialog().findViewById(R.id.et_product_quantity);
-        int quantity = Integer.parseInt(view.getText().toString());
+        float quantity = Float.parseFloat(view.getText().toString());
 
         final Product product = new Product(name, quantity, false, listId);
         Call<Product> call = api.createProduct(product);
