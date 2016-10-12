@@ -140,23 +140,28 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
     public void onDialogPositiveClick(DialogFragment dialog) {
         EditText view = (EditText) dialog.getDialog().findViewById(R.id.et_product_title);
         String name = view.getText().toString();
-        view = (EditText) dialog.getDialog().findViewById(R.id.et_product_quantity);
-        float quantity = Float.parseFloat(view.getText().toString());
+        if (name.length() == 0 || name.equals(" ") || name.equals("\n")) {
+            Toast.makeText(ListActivity.this, "Please give a product!", Toast.LENGTH_SHORT).show();
+        } else {
+            view = (EditText) dialog.getDialog().findViewById(R.id.et_product_quantity);
+            float quantity = Float.parseFloat(view.getText().toString());
 
-        final Product product = new Product(name, quantity, false, listId);
-        Call<Product> call = api.createProduct(product);
-        call.enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                products.add(product);
-                mAdapter.notifyItemInserted(products.size());
-            }
+            final Product product = new Product(name, quantity, false, listId);
+            Call<Product> call = api.createProduct(product);
+            call.enqueue(new Callback<Product>() {
+                @Override
+                public void onResponse(Call<Product> call, Response<Product> response) {
+                    products.add(product);
+                    mAdapter.notifyItemInserted(products.size());
+                }
 
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
 
-            }
-        });
+                @Override
+                public void onFailure(Call<Product> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     @Override
