@@ -2,6 +2,7 @@ package com.naskogeorgiev.simpleshoppinglist.activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import com.naskogeorgiev.simpleshoppinglist.interfaces.ShoppingListAPI;
 import com.naskogeorgiev.simpleshoppinglist.models.Product;
 
 import java.util.List;
+import java.lang.reflect.Field;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -137,34 +139,55 @@ public class ListActivity extends AppCompatActivity implements IRecycleViewSelec
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(DialogFragment dialog, DialogInterface dialogInterface) {
         EditText view = (EditText) dialog.getDialog().findViewById(R.id.et_product_title);
         String name = view.getText().toString();
-        if (name.length() == 0 || name.equals(" ") || name.equals("\n")) {
+        if (name.length() == 0 || name.equals(" ") || name.equals("\n") || name.equals("")) {
             Toast.makeText(ListActivity.this, "Please give a product!", Toast.LENGTH_SHORT).show();
+            closeDialog(dialogInterface, false);
         } else {
             view = (EditText) dialog.getDialog().findViewById(R.id.et_product_quantity);
-            float quantity = Float.parseFloat(view.getText().toString());
+            try {
+                float quantity = Float.parseFloat(view.getText().toString());
+                final Product product = new Product(name, quantity, false, listId);
+                Call<Product> call = api.createProduct(product);
+                call.enqueue(new Callback<Product>() {
+                    @Override
+                    public void onResponse(Call<Product> call, Response<Product> response) {
+                        products.add(product);
+                        mAdapter.notifyItemInserted(products.size());
+                    }
 
-            final Product product = new Product(name, quantity, false, listId);
-            Call<Product> call = api.createProduct(product);
-            call.enqueue(new Callback<Product>() {
-                @Override
-                public void onResponse(Call<Product> call, Response<Product> response) {
-                    products.add(product);
-                    mAdapter.notifyItemInserted(products.size());
-                }
 
+                    @Override
+                    public void onFailure(Call<Product> call, Throwable t) {
 
-                @Override
-                public void onFailure(Call<Product> call, Throwable t) {
+                    }
+                });
+                dialogInterface.dismiss();
+                closeDialog(dialogInterface, true);
+            } catch (Exception e){
+                Toast.makeText(ListActivity.this, "You must give a quantity!", Toast.LENGTH_SHORT).show();
+                closeDialog(dialogInterface, false);
+            }
 
-                }
-            });
         }
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(DialogFragment dialog, DialogInterface dialogInterface) {
+        dialogInterface.dismiss();
+        closeDialog(dialogInterface, true);
+    }
+
+    private void closeDialog(DialogInterface dialogInterface, boolean close) {
+        try {
+            Field field = dialogInterface.getClass().getSuperclass().getDeclaredField("mShowing");
+
+            field.setAccessible(true);
+            field.set(dialogInterface, close);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

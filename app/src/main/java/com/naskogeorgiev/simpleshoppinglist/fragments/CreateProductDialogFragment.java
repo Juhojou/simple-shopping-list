@@ -39,13 +39,13 @@ public class CreateProductDialogFragment extends DialogFragment {
                 .setPositiveButton("Добави", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDialogPositiveClick(CreateProductDialogFragment.this);
+                        mListener.onDialogPositiveClick(CreateProductDialogFragment.this, dialog);
                     }
                 })
                 .setNegativeButton("Отказ", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDialogNegativeClick(CreateProductDialogFragment.this);
+                        mListener.onDialogNegativeClick(CreateProductDialogFragment.this, dialog);
                     }
                 });
 
@@ -54,9 +54,9 @@ public class CreateProductDialogFragment extends DialogFragment {
     }
 
     public interface DialogListener {
-        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogPositiveClick(DialogFragment dialog, DialogInterface dialogInterface);
 
-        void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog, DialogInterface dialogInterface);
     }
 
 }
